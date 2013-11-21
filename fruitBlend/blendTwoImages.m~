@@ -1,9 +1,0 @@
-clear all; clc; close all;
-
-apple =  imread('apple.jpg');
-orange =  imread('orange.jpg');
-
-mask = imread('mask512.jpg');
-mask = mask(:,1:256,:);
-
-appleMask = apple
