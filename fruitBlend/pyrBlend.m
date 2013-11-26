@@ -17,7 +17,7 @@ v = ceil(newSize/2.0);
 maska = zeros(size(limga{1}));
 maska(:,1:v,:) = 1;
 maskb = 1-maska;
-blurh = fspecial('gauss',150,25); % feather the border. Size then  sigma
+blurh = fspecial('gauss',50,25); % feather the border. Size then  sigma
 maska = imfilter(maska,blurh,'replicate');
 maskb = imfilter(maskb,blurh,'replicate');
 maska = imfilter(maska,blurh,'replicate');
@@ -43,7 +43,7 @@ end
 
 
 imgo = collapsePyramid(blendedPyramid);   %%collapse
-imwrite(imgo, 'blendedImage.jpg');
+imwrite(imgo, 'outputImages/blendedImage.jpg');
 %figure,imshow(imgo) % blend by pyramid
 %imgo1 = maskABeforeReduction.*imga+maskBBeforeReduction.*imgb;
 %figure,imshow(imgo1) % blend by feathering
