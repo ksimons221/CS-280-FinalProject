@@ -1,11 +1,22 @@
 clear all; clc; close all;
 
 apple =  imread('apple.jpg');
-orange =  imread('orange.jpg');
+orange =  imread('apple.jpg');
+
+imwrite(apple, 'test.jpg');
+%imshow(apple);
+%return
 
 mask = imread('mask512.jpg');
+mask = mask./255.0;
 
-d = 6;
+
+min_size = 512;
+d = (floor(log2(min_size))) - 4; % at least 16x16 at the highest level.
+d = 4;
+
+
+%Not a problem in Blend
 
 %RED
 redApple = apple(:,:,1);
@@ -23,7 +34,11 @@ redMaskGPyramid = createGaussianPyramid(redMask, d);
 
 [ finalImageR ] = collapsedPyramid( blendedPyramidR );
 
-%GREEN
+imwrite(redApple, 'realRed.jpg');
+imwrite(finalImageR, 'redChannel.jpg');
+
+return
+%GREENfinalVal = 
 greenApple = apple(:,:,2);
 greenAppleGPyramid = createGaussianPyramid(greenApple, d);
 [ greenAppleLPyramid ] = createLaplacianPyramid( greenAppleGPyramid );
@@ -52,6 +67,7 @@ blueOrangeGPyramid = createGaussianPyramid(blueOrange, d);
 blueMask = mask(:,:,3);
 blueMaskGPyramid = createGaussianPyramid(blueMask, d);
 
+
 [ blendedPyramidB ] = blend(blueOrangeLPyramid, blueAppleLPyramid, blueMaskGPyramid );
 
 [ finalImageB ] = collapsedPyramid( blendedPyramidB );
@@ -61,4 +77,7 @@ blueMaskGPyramid = createGaussianPyramid(blueMask, d);
 newImage = cat(3,finalImageR, finalImageG);
 newImage = cat(3,newImage, finalImageB);
 
-imshow(newImage);
+
+
+%imshow(newImage);
+imwrite(newImage, 'blendedImage.jpg');
