@@ -9,9 +9,6 @@ im2_cdf = makeCDF(im2);
 for i = 1:rows
     for j = 1:cols
         out_im(i,j) = InvCDFLookup(im2_cdf, im1_cdf(im1(i,j)+1)) - 1;
-        if out_im(i,j) ~= im1(i,j) && im1(i,j) ~= 0
-            keyboard;
-        end
     end
 end
 end
@@ -28,14 +25,14 @@ end
 
 function [out] = InvCDFLookup(cdf, value)
 for i = 1:length(cdf)
-    if cdf(i) == value
+    if abs(cdf(i) - value) < .000001
         out = i;
         return;
     elseif cdf(i) > value && i == 1
-        out = 0; % not sure if this is the right way to handle this edge case
-        keyboard;
+        out = 1; % not sure if this is the right way to handle this edge case
+        %keyboard;
         return;
-    elseif cdf(i) > value && cdf(i-1) < value
+    elseif cdf(i) > value && cdf(i-1) <= value
         out = (value-cdf(i-1))*(1/(cdf(i)-cdf(i-1)))+(i-1);
         return;
     end
