@@ -5,22 +5,19 @@ out_im = zeros(size(im1));
 im1_cdf = makeCDF(im1);
 im2_cdf = makeCDF(im2);
 
-inv_im2_cdf = makeInvCDF(im2_cdf);
-
 [rows, cols] = size(out_im);
-
 for i = 1:rows
     for j = 1:cols
-        out_im(i,j) = 0; %lookup(inv_im2_cdf, im1_cdf(im1(i,j)))
+        out_im(i,j) = InvCDFLookup(im2_cdf, im1_cdf(im1(i,j)+1)) - 1;
+        if out_im(i,j) ~= im1(i,j) && im1(i,j) ~= 0
+            keyboard;
+        end
     end
 end
-
 end
 
 function [cdf] = makeCDF(im)
-im = reshape(im, 1, []);
-im = im./(size(im, 1)*size(im, 2));
-h = hist(im);
+h = myHist(im);
 sum = 0;
 cdf = zeros(size(h));
 for i=1:length(h)
@@ -29,6 +26,27 @@ for i=1:length(h)
 end
 end
 
-function [inv_cdf] = makeInvCDF(cdf)
+function [out] = InvCDFLookup(cdf, value)
+for i = 1:length(cdf)
+    if cdf(i) == value
+        out = i;
+        return;
+    elseif cdf(i) > value && i == 1
+        out = 0; % not sure if this is the right way to handle this edge case
+        keyboard;
+        return;
+    elseif cdf(i) > value && cdf(i-1) < value
+        out = (value-cdf(i-1))*(1/(cdf(i)-cdf(i-1)))+(i-1);
+        return;
+    end
+end
+end
 
+function [histo] = myHist(im)
+im = reshape(im, 1, []);
+histo = zeros(1,256);
+for i = 1:256
+    histo(i) = sum(im == i-1); 
+end
+histo = histo/length(im);
 end

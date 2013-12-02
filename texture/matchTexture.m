@@ -4,15 +4,15 @@ im = matchHistogram(noise, texture);
 analysis_pyr = genPyr(texture, 'laplace', numLevelsPyr);
 
 for i = 1:iterations
-    synthesisPyr = genPyr(im, 'laplace', numLevelsPyr);
+    synthesis_pyr = genPyr(im, 'laplace', numLevelsPyr);
     for j = 1:numLevelsPyr
-        matchHistogram(,);
-        
+        synthesis_pyr{j} = matchHistogram(synthesis_pyr{j}, analysis_pyr{j});
     end
-    im = collapsePyramid(synthesisPyr);
+    
+    im = collapsePyramid(synthesis_pyr);
     im = matchHistogram(im, texture);
 end
 
-
+imagesc(im);
 end
 
