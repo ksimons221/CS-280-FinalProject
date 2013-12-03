@@ -8,7 +8,7 @@ im2_cdf = makeCDF(im2);
 [rows, cols] = size(out_im);
 for i = 1:rows
     for j = 1:cols
-        out_im(i,j) = InvCDFLookup(im2_cdf, im1_cdf(im1(i,j)+1)) - 1;
+        out_im(i,j) = InvCDFLookup(im2_cdf, CDFLookup(im1_cdf, im1(i,j)+1)) - 1;
     end
 end
 end
@@ -36,6 +36,20 @@ for i = 1:length(cdf)
         out = (value-cdf(i-1))*(1/(cdf(i)-cdf(i-1)))+(i-1);
         return;
     end
+end
+end
+
+function [out] = CDFLookup(cdf, value)
+before = floor(value);
+if value == before
+    out = cdf(value);
+else
+    after = ceil(value);
+    if before < 0 || after < 0
+        keyboard;
+    end
+    m = cdf(after)-cdf(before);
+    out = m*(value - before) + cdf(before);
 end
 end
 
