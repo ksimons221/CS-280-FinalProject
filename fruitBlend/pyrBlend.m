@@ -6,7 +6,7 @@ levels = 5;
 imageA = im2double(imread('apple.jpg'));
 imageB = im2double(imread('apple.jpg'));
 
- [ outputImage ] = blendWithMask(imageA, imageB, -20, 2  5, levels);
+ [ outputImage ] = blendWithMask(imageA, imageB, -20, 20, levels);
 
 %e = genPyr(outputImage, 'gauss', levels);
 %r = magic(e, genPyr(maskABeforeReduction, 'gauss', levels));

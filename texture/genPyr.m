@@ -18,6 +18,8 @@ for p = level-1:-1:1 % adjust the image size
 	pyr{p} = pyr{p}(1:osz(1),1:osz(2),:);
 end
 
+keyboard;
+
 for p = 1:level-1
 	pyr{p} = pyr{p}-  impyramid(pyr{p+1}, 'expand'); %  pyr_expand(pyr{p+1});
 end
