@@ -35,6 +35,8 @@ for i = 1:length(cdf)
     elseif cdf(i) > value && cdf(i-1) <= value
         out = (value-cdf(i-1))*(1/(cdf(i)-cdf(i-1)))+(i-1);
         return;
+    elseif i == length(cdf)
+        keyboard;
     end
 end
 end
@@ -45,7 +47,7 @@ if value == before
     out = cdf(value);
 else
     after = ceil(value);
-    if before < 0 || after < 0
+    if before < 0 || after < 0 || value > 255
         keyboard;
     end
     m = cdf(after)-cdf(before);
@@ -55,6 +57,7 @@ end
 
 function [histo] = myHist(im)
 im = reshape(im, 1, []);
+im = floor(im);
 histo = zeros(1,256);
 for i = 1:256
     histo(i) = sum(im == i-1); 
