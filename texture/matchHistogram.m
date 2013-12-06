@@ -1,16 +1,35 @@
 function [ out_im ] = matchHistogram( im1, im2 )
 % im1 should be noise and im2 should be the texture
 out_im = zeros(size(im1));
+shift = 0;
 
-im1_cdf = makeCDF(im1);
-im2_cdf = makeCDF(im2);
+im1_shifted = im1;
+%{
+if min(min(im1_shifted)) < 0
+    keyboard;
+    shift = min(min(im1_shifted));
+    im1_shifted = im1_shifted - shift;
+end
+%}
+
+im2_shifted = im2;
+%{
+if min(min(im2_shifted)) < 0
+    im2_shifted = im2_shifted - min(min(im2_shifted));
+end
+%}
+
+im1_cdf = makeCDF(im1_shifted);
+im2_cdf = makeCDF(im2_shifted);
 
 [rows, cols] = size(out_im);
 for i = 1:rows
     for j = 1:cols
-        out_im(i,j) = InvCDFLookup(im2_cdf, CDFLookup(im1_cdf, im1(i,j)+1)) - 1;
+        out_im(i,j) = InvCDFLookup(im2_cdf, CDFLookup(im1_cdf, im1_shifted(i,j)+1)) - 1;
     end
 end
+
+out_im = out_im + shift;
 end
 
 function [cdf] = makeCDF(im)
@@ -41,13 +60,21 @@ for i = 1:length(cdf)
 end
 end
 
-function [out] = CDFLookup(cdf, value)
+
+function [bucketIndex] = generatBucketIndex(minValue, bucketSize, value)
+    bucketIndex = floor((value-minValue)/bucketSize);
+end
+
+function [out] = CDFLookup(cdf, value, minVal, bucketSize)
+bucketIndex = generatBucketIndex(minVal, bucketSize, value);
+value = bucketIndex;
+
 before = floor(value);
 if value == before
     out = cdf(value);
 else
     after = ceil(value);
-    if before < 0 || after < 0 || value > 255
+    if before < 0 || after < 0
         keyboard;
     end
     m = cdf(after)-cdf(before);
@@ -55,12 +82,19 @@ else
 end
 end
 
-function [histo] = myHist(im)
+function [histo, min_val, bucketSize] = myHist(im)
 im = reshape(im, 1, []);
-im = floor(im);
 histo = zeros(1,256);
+
+max_val = max(im);
+min_val = min(im);
+
+bucketSize = (max_val-min_val)/256;
+
 for i = 1:256
-    histo(i) = sum(im == i-1); 
+    lower_bound = min_val + (i-1)*bucketSize;
+    upper_bound = min_val + i*bucketSize;
+    histo(i) = length(find(im >= lower_bound & im < upper_bound)); 
 end
 histo = histo/length(im);
 end
