@@ -19,21 +19,32 @@ if min(min(im2_shifted)) < 0
 end
 %}
 
-im1_cdf = makeCDF(im1_shifted);
-im2_cdf = makeCDF(im2_shifted);
+[im1_cdf, min_val1, bucketSize1] = makeCDF(im1_shifted);
+[im2_cdf, min_val2, bucketSize2] = makeCDF(im2_shifted);
 
 [rows, cols] = size(out_im);
 for i = 1:rows
     for j = 1:cols
-        out_im(i,j) = InvCDFLookup(im2_cdf, CDFLookup(im1_cdf, im1_shifted(i,j)+1)) - 1;
+        [bucketIndex] = generatBucketIndex(min_val1, bucketSize1, im1_shifted(i,j));
+        
+        if bucketIndex < 1 || bucketIndex > 256
+            keyboard;
+        end
+       
+        newPercentage = CDFLookup(im1_cdf, bucketIndex);
+        newPixelValue = InvCDFLookup(im2_cdf,newPercentage ); 
+        
+  
+        
+        
+        out_im(i,j) = newPixelValue;
     end
 end
 
-out_im = out_im + shift;
 end
 
-function [cdf] = makeCDF(im)
-h = myHist(im);
+function [cdf, min_val, bucketSize] = makeCDF(im)
+[h, min_val, bucketSize] = myHist(im);
 sum = 0;
 cdf = zeros(size(h));
 for i=1:length(h)
@@ -43,6 +54,7 @@ end
 end
 
 function [out] = InvCDFLookup(cdf, value)
+value = min(value, max(cdf));
 for i = 1:length(cdf)
     if abs(cdf(i) - value) < .000001
         out = i;
@@ -62,11 +74,15 @@ end
 
 
 function [bucketIndex] = generatBucketIndex(minValue, bucketSize, value)
-    bucketIndex = floor((value-minValue)/bucketSize);
+    temp = (value-minValue)/bucketSize;
+    if temp == 256
+        bucketIndex = temp;
+    else
+        bucketIndex = floor(temp) +1;
+    end
 end
 
-function [out] = CDFLookup(cdf, value, minVal, bucketSize)
-bucketIndex = generatBucketIndex(minVal, bucketSize, value);
+function [out] = CDFLookup(cdf, bucketIndex)
 value = bucketIndex;
 
 before = floor(value);
@@ -83,18 +99,18 @@ end
 end
 
 function [histo, min_val, bucketSize] = myHist(im)
-im = reshape(im, 1, []);
-histo = zeros(1,256);
+    im = reshape(im, 1, []);
+    histo = zeros(1,256);
 
-max_val = max(im);
-min_val = min(im);
+    max_val = max(im);
+    min_val = min(im);
 
-bucketSize = (max_val-min_val)/256;
+    bucketSize = (max_val-min_val)/256;
 
-for i = 1:256
-    lower_bound = min_val + (i-1)*bucketSize;
-    upper_bound = min_val + i*bucketSize;
-    histo(i) = length(find(im >= lower_bound & im < upper_bound)); 
-end
-histo = histo/length(im);
+    for i = 1:256
+        lower_bound = min_val + (i-1)*bucketSize;
+        upper_bound = min_val + i*bucketSize;
+        histo(i) = length(find(im >= lower_bound & im < upper_bound)); 
+    end
+    histo = histo/length(im);
 end
