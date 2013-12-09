@@ -1,6 +1,5 @@
 function [ im ] = matchTexture( noise, texture, numLevelsPyr, iterations )
 im = matchHistogram(noise, texture);
-
 analysis_pyr = genPyr(texture, 'lap', numLevelsPyr);
 
 for i = 1:iterations
@@ -14,9 +13,6 @@ for i = 1:iterations
     im = matchHistogram(im, texture);
 end
 
-
-im = uint8(im);
-imshow(im);
 
 end
 
