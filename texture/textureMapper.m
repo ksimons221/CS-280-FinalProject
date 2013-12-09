@@ -30,8 +30,7 @@ out_b = reshape(newBTexture, h*w, 1);
 
 out = double([out_r, out_g, out_b])';
 out = (M^-1)*out;
-keyboard;
-out_im= out + [ones(h*w,1)*means_d(1) ,ones(h*w,1)*means_d(2), ones(h*w,1)*means_d(3)];
+out_im= out + [ones(h*w,1)*means_d(1) ,ones(h*w,1)*means_d(2), ones(h*w,1)*means_d(3)]';
 
 
 keyboard;
