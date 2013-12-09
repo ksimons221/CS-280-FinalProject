@@ -5,7 +5,7 @@ function [ outputImage ] = blendWithMask( imga, imgb, contrastOffset, shift, lev
 imgb = imgb + (contrastOffset/255.0);
 
 limga = genPyr(imga,'lap',levels); % Laplacian pyramid 1
-keyboard;
+
 limgb = genPyr(imgb,'lap',levels); % Laplacian pyramid 2
 newSize = size(limga{1}, 1);
 
@@ -19,7 +19,6 @@ blurh = fspecial('gauss',10,4); % feather the border. Size then  sigma
 %maska = imfilter(maska,blurh,'replicate');
 %maskb = imfilter(maskb,blurh,'replicate');
 
-imshow(maska);
 
 % Done with mask
 
