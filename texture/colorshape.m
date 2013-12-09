@@ -9,10 +9,11 @@ C= D_norm*D_norm';
 
 [V, S, U] = svd(C);
 S_root = sqrt(S);
-inv_S = inv(S);
+inv_S = inv(S_root);
 
 M = (inv_S)*U';
 im_colorshaped = M*D_norm;
+
 
 end
 

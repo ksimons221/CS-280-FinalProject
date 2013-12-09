@@ -11,6 +11,8 @@ iterations = 1;
 
 [w, h, ~] = size(smallTexture);
 [im, M, means_d] = colorshape(smallTexture);
+
+
 im = im';
 
 im_r = reshape(im(:,1), w, h);
@@ -29,8 +31,21 @@ newBTexture = matchTexture(rand(300, 300), im_b, numLevelsPyr, iterations);
 out_b = reshape(newBTexture, h*w, 1);
 
 out = double([out_r, out_g, out_b])';
-out = (M^-1)*out;
+out = inv(M)*out;
 out_im= out + [ones(h*w,1)*means_d(1) ,ones(h*w,1)*means_d(2), ones(h*w,1)*means_d(3)]';
 
+out_imr = out_im(1,:);
+out_img = out_im(2,:);
+out_imb = out_im(3,:);
 
+out_imr = reshape(out_imr , w, h);
+out_img = reshape(out_img , w, h);
+out_imb = reshape(out_imb , w, h);
+
+
+out_im = cat(3, out_imr, out_img);
+out_im = cat(3, out_im, out_imb);
+
+imshow(uint8(out_im));
+diff = double(smallTexture) - out_im;
 keyboard;
