@@ -17,6 +17,7 @@ im_r = reshape(im(:,1), w, h);
 im_g = reshape(im(:,2), w, h);
 im_b = reshape(im(:,3), w, h);
 
+keyboard;
 newRTexture = matchTexture(rand(300, 300), im_r, numLevelsPyr, iterations);
 [h, w] = size(newRTexture);
 out_r = reshape(newRTexture, h*w, 1);
