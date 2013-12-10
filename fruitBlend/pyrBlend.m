@@ -1,35 +1,19 @@
-    clear all; clc; close all;
+clear all; clc; close all;
 
-levels = 2;
+levels = 2; 
 
+imageName = 'forest.jpg';
 
-oldData = load('restultPre.mat');
+imageA = im2double(imread(imageName));
+imageB = im2double(imread(imageName));
 
-
-
-imageA = im2double(imread('forest.jpg'));
-imageB = im2double(imread('forest.jpg'));
-
- [h, w d] =  size(imageA);
-
-
-shift = 0;
+ [h, w, ~] =  size(imageA);
  
 resultsPercentage = zeros(10, 10);
 
-originalString = 'Hello Amrit and Tim. texture work pls';
+originalString = 'Hello Amrit and Tim.';
 
-[ bitsToEncode, numBitsToEncode ] = createBitsToEncode( originalString );
-bitsToEncode
-
-
-currentString = '';
-
-for i = 1 : size(bitsToEncode,2)
-    currentString = strcat(currentString,num2str(bitsToEncode(i)));
-end
-
-reconstructedString = char(bin2dec(reshape(currentString,7,[]).')).';
+[ bitsToEncode, numBitsToEncode ] = createBitsToEncode( originalString )
 
 dataSquare = zeros(10,10);
 
@@ -66,10 +50,8 @@ for currentContrastMagnitude = 10: 10
                 
                 imageASample = imageA((i*cutSize)+1:(i+1)*cutSize, (j*cutSize)+1:(j+1)*cutSize, :);
                 imageBSample = imageB((i*cutSize)+1:(i+1)*cutSize, (j*cutSize)+1:(j+1)*cutSize, :);
-
-                %[ newImage, results ] = changeContrast( imageA, imageB, levels, shift, contrastAdjust, squareSize  );
                 
-                [ newImage ] = blendWithMask( imageASample, imageBSample, contrastAdjust, shift, levels, squareSize );
+                [ newImage ] = blendWithMask( imageASample, imageBSample, contrastAdjust, levels, squareSize );
                 [ results ] = decodeImage( newImage, squareSize );
                 
                 if results == 1
@@ -94,7 +76,7 @@ for currentContrastMagnitude = 10: 10
 
 end
 
-
+% can load the data if already saved
 t = load('forestDataSquare.mat');
 dataSquare = t.dataSquare;
 
@@ -110,22 +92,16 @@ numBitsCanEncodeWithDiffSquares = r.numBitsCanEncodeWithDiffSquares;
     return;
  end
  
-  
+%Create the final image 
+
 squareSize = currentSquareSize * 10;
-
 cutSize = squareSize * 3;
-
 cutsW = floor(w / cutSize) - 1;
 cutsH = floor(h / cutSize) - 1;
 
 finalImage = zeros(1,1,3);
-    
 bitCounter = 1;
-        
-totalBitsEncoded = 0;
-        
-correct = 0;
- 
+                 
 for i = 0 : cutsH
 
     for j = 0 : cutsW
@@ -149,7 +125,7 @@ for i = 0 : cutsH
     imageASample = imageA((i*cutSize)+1:(i+1)*cutSize, (j*cutSize)+1:(j+1)*cutSize, :);
     imageBSample = imageB((i*cutSize)+1:(i+1)*cutSize, (j*cutSize)+1:(j+1)*cutSize, :);
                 
-    [ newImage ] = blendWithMask( imageASample, imageBSample, contrastAdjust, shift, levels, squareSize );
+    [ newImage ] = blendWithMask( imageASample, imageBSample, contrastAdjust, levels, squareSize );
 
     [newH, newW, d] = size(newImage);
 
@@ -164,36 +140,9 @@ for i = 0 : cutsH
     end
 end
  
-           
+%%% Finished encoding the image. Now we need to reconstruct bits           
 
-decodeSquare = squareSize;
-subSquareSize = (decodeSquare*3) - 1;
+[ resultBits ] = reconstructBits( finalImage, squareSize)
 
- [h, w, ~] =  size(finalImage);
-
-
-cutsW = floor(w / subSquareSize);
-cutsH = floor(h / subSquareSize);
-
-total = 0;
-totalWrong = 0;
-
-resultBits = zeros(1, cutsH * cutsW);
-
-counter  = 1;
-for i = 0 : cutsH - 1
-
-    for j = 0 : cutsW - 1
-        
-        subImage = finalImage(   (i*subSquareSize)+1: (i+1)*subSquareSize,   (j*subSquareSize)+1: (j+1)*subSquareSize, :);
-        [ bit ] = decodeImage( subImage, decodeSquare);
-        resultBits(counter) = bit;
-        counter = counter + 1;
-
-    end
-end
-
-resultBits
-imshow(finalImage);
-
+imshow(finalImage);  %the final tiled image
 

@@ -9,7 +9,7 @@ temp = 0;
 for i = 1:10
     for j = 1:10
         
-        if dataSquare(i,j) > .80
+        if dataSquare(i,j) > .80   %just cause we want to still be statistically significant
         
             errorRecorded = 1-  dataSquare(i, j);
             bitsWeCanEncode = squareSizes(j);
@@ -27,7 +27,6 @@ for i = 1:10
     end
 end
 
-%]temp
 
 end
 
