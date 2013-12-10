@@ -5,5 +5,9 @@ I = rgb2gray(smallTexture);
 
 
 firstIm = conv2(I, allFilters(:,:,1), 'valid');
-imagesc(firstIm);
+
+
+%imagesc(firstIm);
+
+imagesc(allFilters(:,:,30));
 
