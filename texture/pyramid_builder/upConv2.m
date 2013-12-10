@@ -58,7 +58,7 @@ end
 
 % A multiple of step
 if (exist('stop') ~= 1)
-  %stop = step .* (floor((start-ones(size(start)))./step)+size(im))
+  stop = step .* (floor((start-ones(size(start)))./step)+size(im));
 end	
 
 if ( ceil((stop(1)+1-start(1)) / step(1)) ~= size(im,1) )
