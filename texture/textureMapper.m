@@ -4,7 +4,7 @@ smallTexture = imread('texture1.jpg');
 
 smallTextureGray = rgb2gray(smallTexture);
 
-numLevelsPyr = 5;
+numLevelsPyr = 4;
 
 iterations = 5;
 
