@@ -1,5 +1,7 @@
 function [ out ] = upsampleImage( im, factor )
-temp = upsample(im, factor);
-out = upsample(temp', factor);
+for i = 1:size(im,3)
+    temp = upsample(im(:,:,i), factor);
+    out(:,:,i) = upsample(temp', factor);
+end
 end
 
