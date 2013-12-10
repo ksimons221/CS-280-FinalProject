@@ -19,10 +19,6 @@ im_r = reshape(im(:,1), w, h);
 im_g = reshape(im(:,2), w, h);
 im_b = reshape(im(:,3), w, h);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d87f1c066c939849242095e3ab95d89303fd3870
 newRTexture = matchTexture(rand(300, 300), im_r, numLevelsPyr, iterations);
 [h, w] = size(newRTexture);
 out_r = reshape(newRTexture, h*w, 1);
