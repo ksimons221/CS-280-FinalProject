@@ -1,30 +1,32 @@
-function [ r ] = findSeam( image )
+function [ rowAverage, colAverage ] = findSeam( grayIm, squareSize )
 
-shiftAmout = 20;
+[h, w] =  size(grayIm);
+ 
+centerH = floor(h/2);
+centerW = floor(w/2);
 
-grayIm = rgb2gray(image);
+startH = centerH - squareSize;
+endH = centerH + squareSize;
 
-[h, w] = size(grayIm);
+totalRow = grayIm(startH, :);
 
-seam1 = floor(( w/2) - shiftAmout);
-seam2 = floor(( w/2) + shiftAmout);
-
-middle = floor(h/2);
-
-boxSize = 10;
-
-
-totalRow = grayIm(1, :);
-
-for i = 2:h
+for i = startH+1:endH
     totalRow = totalRow + grayIm(i, :);
 end
 
-normalizedRow = totalRow./h;
+rowAverage = totalRow./(endH-startH);
 
-%plot(normalizedRow);
 
-r = normalizedRow;
+startW = centerW - squareSize;
+endW = centerW + squareSize;
+
+totalCol = grayIm(:, startW);
+
+for i = startW+1:endW
+    totalCol = totalCol + grayIm(:, i);
+end
+
+colAverage = totalCol./(endW-startW);
 
 end
 

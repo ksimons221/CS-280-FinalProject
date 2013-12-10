@@ -1,4 +1,4 @@
-function [ outputImage ] = blendWithMask( imga, imgb, contrastOffset, shift, levels )
+function [ outputImage ] = blendWithMask( imga, imgb, contrastOffset, shift, levels, squareSize )
 
 % size(imga) = size(imgb) %imresize(imga,[size(imgb,1) size(imgb,2)]);
 
@@ -18,6 +18,20 @@ maskb = 1-maska;
 blurh = fspecial('gauss',10,4); % feather the border. Size then  sigma
 %maska = imfilter(maska,blurh,'replicate');
 %maskb = imfilter(maskb,blurh,'replicate');
+
+
+%square Mask
+
+[h, w, d] = size(limga{1});
+
+centerH = floor(h/2);
+centerW = floor(w/2);
+
+
+
+maska = ones(size(limga{1}));
+maska(centerH-squareSize: centerH+squareSize, centerW-squareSize: centerW+squareSize, :) = 0;
+maskb = 1-maska;
 
 
 % Done with mask

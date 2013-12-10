@@ -6,7 +6,7 @@ smallTextureGray = rgb2gray(smallTexture);
 
 numLevelsPyr = 5;
 
-iterations = 1;
+iterations = 5;
 
 
 [w, h, ~] = size(smallTexture);
@@ -19,7 +19,6 @@ im_r = reshape(im(:,1), w, h);
 im_g = reshape(im(:,2), w, h);
 im_b = reshape(im(:,3), w, h);
 
-keyboard;
 newRTexture = matchTexture(rand(300, 300), im_r, numLevelsPyr, iterations);
 [h, w] = size(newRTexture);
 out_r = reshape(newRTexture, h*w, 1);
@@ -47,5 +46,3 @@ out_im = cat(3, out_imr, out_img);
 out_im = cat(3, out_im, out_imb);
 
 imshow(uint8(out_im));
-diff = double(smallTexture) - out_im;
-keyboard;
