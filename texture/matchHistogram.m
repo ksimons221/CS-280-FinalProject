@@ -23,6 +23,7 @@ end
 [im1_cdf, min_val1, bucketSize1] = makeCDF(im1_shifted);
 [im2_cdf, min_val2, bucketSize2] = makeCDF(im2_shifted);
 
+
 [rows, cols] = size(out_im);
 for i = 1:rows
     for j = 1:cols
@@ -31,6 +32,7 @@ for i = 1:rows
         if bucketIndex < 1 || bucketIndex > 256
             keyboard;
         end
+        
         newPercentage = CDFLookup(im1_cdf, bucketIndex);
         newBucket = InvCDFLookup(im2_cdf,newPercentage ); 
         newPixelValue = min_val2 + (bucketSize2 * newBucket);
@@ -44,6 +46,7 @@ end
 
 function [cdf, min_val, bucketSize] = makeCDF(im)
 [h, min_val, bucketSize] = myHist(im);
+
 sum = 0;
 cdf = zeros(size(h));
 for i=1:length(h)
@@ -105,11 +108,18 @@ function [histo, min_val, bucketSize] = myHist(im)
     min_val = min(im);
 
     bucketSize = (max_val-min_val)/256;
-
     for i = 1:256
         lower_bound = min_val + (i-1)*bucketSize;
         upper_bound = min_val + i*bucketSize;
-        histo(i) = length(find(im >= lower_bound & im < upper_bound)); 
+        if (i ~= 256)
+            histo(i) = length(find(im >= lower_bound & im < upper_bound)); 
+        else
+            histo(i) = length(find(im >= lower_bound));
+        end
+        
     end
+    
     histo = histo/length(im);
+    
+
 end
