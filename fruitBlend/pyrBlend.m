@@ -1,4 +1,4 @@
-clear all; clc; close all;
+    clear all; clc; close all;
 
 levels = 2;
 
@@ -7,8 +7,8 @@ oldData = load('restultPre.mat');
 
 
 
-imageA = im2double(imread('leaves.jpg'));
-imageB = im2double(imread('leaves.jpg'));
+imageA = im2double(imread('forest.jpg'));
+imageB = im2double(imread('forest.jpg'));
 
  [h, w d] =  size(imageA);
 
@@ -38,7 +38,9 @@ numBitsCanEncodeWithDiffSquares = zeros(1,10);
 for currentContrastMagnitude = 10: 10
 
     for currentSquareSize = 10: 10
-                        
+        
+        [currentContrastMagnitude, currentSquareSize]
+        
         squareSize = currentSquareSize * 10;
 
         cutSize = squareSize * 3;
@@ -92,10 +94,11 @@ for currentContrastMagnitude = 10: 10
 
 end
 
-t = load('leavesDataSquare.mat');
+
+t = load('forestDataSquare.mat');
 dataSquare = t.dataSquare;
 
-r = load('leavesNumBitsEncoded.mat');
+r = load('forestNumBitEncoded.mat');
 numBitsCanEncodeWithDiffSquares = r.numBitsCanEncodeWithDiffSquares;
 
 [currentContrastMagnitude, currentSquareSize, bitsWeNeedToEncode]=pickParamaters( dataSquare, numBitsCanEncodeWithDiffSquares, numBitsToEncode)
