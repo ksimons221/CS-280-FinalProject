@@ -21,7 +21,7 @@ end
 
 
 function [myCell, pind] = build(im, numLevelsPyr)
-[pyr,pind,~,~] = buildSpyr(im, numLevelsPyr, 'sp1Filters', 'reflect1');
+[pyr,pind,~,~] = buildSpyr(im, numLevelsPyr, 'sp5Filters', 'reflect1');
 [m, b] = size(pind);
 myCell = cell(m,1);
 startOfpyr = 0;
@@ -41,5 +41,5 @@ for x =2:m
     temp = myCell{x};
     pyr = [pyr; temp(:)];
 end
-im = reconSpyr(pyr, pind, 'sp1Filters');
+im = reconSpyr(pyr, pind, 'sp5Filters');
 end
