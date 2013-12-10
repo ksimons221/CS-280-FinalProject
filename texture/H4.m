@@ -2,7 +2,7 @@ function [H4_filters ] = H4(m)
 
 
 N= 49;
-H4_filters = zeros(N,N,4);
+H4_filters = zeros(N,N,8);
 
 H4_vert = ones(N, N);
 center = (N+1)./2;
@@ -56,11 +56,6 @@ end
 
  H4_45 = H4_45./Norm;
 
-imagesc(H4_45);
-
-
-
-
 
 H4_135 = ones(N, N);
 center = (N+1)./2;
@@ -78,17 +73,16 @@ end
 
 H4_135 = H4_135./Norm;
 
-imagesc(H4_135);
-
-
-
-imagesc(H4_135);
-
-
 H4_filters(:,:,1) = H4_vert;
 H4_filters(:,:,2) = H4_horz;
 H4_filters(:,:,3) = H4_45;
 H4_filters(:,:,4) = H4_135;
+
+H4_filters(:,:,5) = flipper(H4_vert);
+H4_filters(:,:,6) = flipper(H4_horz);
+H4_filters(:,:,7) = flipper(H4_45);
+H4_filters(:,:,8) = flipper(H4_135);
+
 
 end
 

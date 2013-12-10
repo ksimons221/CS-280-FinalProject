@@ -57,7 +57,6 @@ end
 
  H4_45 = H4_45./Norm;
 
-imagesc(H4_45);
 
 
 
@@ -79,13 +78,7 @@ end
 
 H4_135 = H4_135./Norm;
 
-imagesc(H4_135);
 
-
-
-imagesc(H4_135);
-
-keyboard;
 H4_filters(:,:,1) = H4_vert;
 H4_filters(:,:,2) = H4_horz;
 H4_filters(:,:,3) = H4_45;
