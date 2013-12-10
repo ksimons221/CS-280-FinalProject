@@ -1,6 +1,5 @@
 function [ results ] = decodeImage( newImage, squareSize )
 
-
 [ rowAverage, colAverage ] = findSeam( rgb2gray(newImage), squareSize );
 
  
@@ -21,8 +20,7 @@ function [ results ] = decodeImage( newImage, squareSize )
 
  intrestSectionLeft = rowAverage(leftMostPoint: leftMostPoint+ boxSize);
  intrestSectionRight = rowAverage(rightMostPoint: rightMostPoint+ boxSize);
-
-  intrestSectionTop = colAverage(topMostPoint: topMostPoint+ boxSize);
+ intrestSectionTop = colAverage(topMostPoint: topMostPoint+ boxSize);
  intrestSectionBottom = colAverage(bottomMostPoint: bottomMostPoint+ boxSize);
  
  leftDeriv = pseudoDerivative(intrestSectionLeft);
@@ -33,8 +31,6 @@ function [ results ] = decodeImage( newImage, squareSize )
  
  allDerivatives = (leftDeriv + topDeriv - rightDeriv - bottomDeriv); 
   
- r = abs(leftDeriv);
- [c, i] = max(r);
 
  
  results = sum(allDerivatives);
@@ -45,9 +41,7 @@ function [ results ] = decodeImage( newImage, squareSize )
      results = 1;
  end
  
- %r = rowAverage(45:55);
-%plot(r);
-%keyboard;
+
 
 end
 
