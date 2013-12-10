@@ -31,14 +31,13 @@ function res = corrDn2(im, filt, edges, step, start, stop)
 
 %% NOTE: THIS CODE IS NOT ACTUALLY USED! (MEX FILE IS CALLED INSTEAD)
 
-fprintf(1,'WARNING: You should compile the MEX version of "corrDn.c",\n         found in the MEX subdirectory of matlabPyrTools, and put it in your matlab path.  It is MUCH faster, and provides more boundary-handling options.\n');
 
 %------------------------------------------------------------
 %% OPTIONAL ARGS:
 
 if (exist('edges') == 1) 
   if (strcmp(edges,'reflect1') ~= 1)
-    warning('Using REFLECT1 edge-handling (use MEX code for other options).');
+    %warning('Using REFLECT1 edge-handling (use MEX code for other options).');
   end
 end
 
