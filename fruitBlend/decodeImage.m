@@ -1,13 +1,11 @@
 function [ results ] = decodeImage( newImage, squareSize )
 
 [ rowAverage, colAverage ] = findSeam( rgb2gray(newImage), squareSize );
-
  
  [h, w, d] =  size(newImage);
  
  centerH = floor(h/2);
  centerW = floor(w/2);
-  
   
  leftMostPoint = centerW - squareSize-3;
  rightMostPoint = centerW + squareSize-3;
@@ -15,7 +13,6 @@ function [ results ] = decodeImage( newImage, squareSize )
  topMostPoint = centerH - squareSize-3;
  bottomMostPoint = centerH + squareSize-3;
 
- 
  boxSize = 6;
 
  intrestSectionLeft = rowAverage(leftMostPoint: leftMostPoint+ boxSize);
@@ -30,8 +27,6 @@ function [ results ] = decodeImage( newImage, squareSize )
  
  
  allDerivatives = (leftDeriv + topDeriv - rightDeriv - bottomDeriv); 
-  
-
  
  results = sum(allDerivatives);
  
@@ -40,12 +35,5 @@ function [ results ] = decodeImage( newImage, squareSize )
  else
      results = 1;
  end
- 
-
 
 end
-
-
-
-
-
