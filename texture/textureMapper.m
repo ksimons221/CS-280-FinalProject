@@ -1,10 +1,10 @@
 clear all; clc; close all;
 
-smallTexture = imread('texture2.png'); 
+smallTexture = imread('fur.png'); 
 
 smallTextureGray = rgb2gray(smallTexture);
 
-numLevelsPyr = 3;
+numLevelsPyr = 5;
 
 iterations = 1;
 
