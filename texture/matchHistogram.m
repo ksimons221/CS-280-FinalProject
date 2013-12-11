@@ -2,7 +2,6 @@ function [ out_im ] = matchHistogram( im1, im2 )
 % im1 should be noise and im2 should be the texture
 
 out_im = zeros(size(im1));
-shift = 0;
 
 im1_shifted = im1;
 %{
@@ -27,10 +26,14 @@ end
 for i = 1:rows
     for j = 1:cols
         [bucketIndex] = generatBucketIndex(min_val1, bucketSize1, im1_shifted(i,j));
-        
         if bucketIndex < 1 || bucketIndex > 256
             keyboard;
         end
+        
+        if i < 100 && j < 100
+            %bucketIndex = 255;
+        end
+        
         newPercentage = CDFLookup(im1_cdf, bucketIndex);
         newBucket = InvCDFLookup(im2_cdf,newPercentage ); 
         newPixelValue = min_val2 + (bucketSize2 * newBucket);
