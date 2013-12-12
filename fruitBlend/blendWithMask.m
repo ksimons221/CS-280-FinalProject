@@ -20,10 +20,14 @@ maska = ones(size(limga{1}));
 maska(centerH-squareSize: centerH+squareSize, centerW-squareSize: centerW+squareSize, :) = 0;
 maskb = 1-maska;
 
-%blurh = fspecial('gauss',10,4); % feather the border. Size then  sigma
+blurh = fspecial('gauss',15,7); % feather the border. Size then  sigma
 %maska = imfilter(maska,blurh,'replicate');
 %maskb = imfilter(maskb,blurh,'replicate');
-
+%maska = imfilter(maska,blurh,'replicate');
+%maskb = imfilter(maskb,blurh,'replicate');
+%maska = imfilter(maska,blurh,'replicate');
+%5maskb = imfilter(maskb,blurh,'replicate');
+%imshow(maskb);
 
 % Done with mask
 

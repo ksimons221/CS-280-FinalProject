@@ -1,6 +1,6 @@
-function [cdf, min_val, bucketSize] = makeCDFTtemp(im)
+function [cdf] = makeCDFTtemp(im)
 
-[h, min_val, bucketSize] = myHist2(im);
+[h] = myHist2(im);
 
 sum = 0;
 cdf = zeros(size(h));

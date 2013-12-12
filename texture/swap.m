@@ -1,15 +1,20 @@
-function [ newIm ] = swap( im, valueLow, valueHigh, squareSize, startX, startY ) 
+function [ newIm, swapIndexes ] = swap( im, valueLow, valueHigh, squareSize, startRow, startCol ) 
 
 
+    %swapIndexes is numSwaps by 4. Each row is x1, y1, x2, y2
+    
     newIm = im;
 
     [rows, cols, ~] = find(im >= valueLow & im <= valueHigh);
 
-    numElements = length(rows);
+    numElements = length(rows)
 
-    vec1 =randperm(squareSize^2);
+    
+    s = RandStream('mt19937ar','Seed',0);
+    
+    vec1 =randperm(s,squareSize^2);
 
-    vec2 =randperm(numElements);
+    vec2 =randperm(s, numElements);
     
     per = numElements/(squareSize.^2);
     limit = 0.4;
@@ -20,16 +25,18 @@ function [ newIm ] = swap( im, valueLow, valueHigh, squareSize, startX, startY )
         numSwaps = ceil(limit*squareSize.^2);
     end    
 
-     numSwaps = numElements
+    numSwaps = min(numElements, squareSize^2)
+    swapIndexes = zeros(numSwaps, 4);
+     
     
     for i = 1:numSwaps
 
         % where to insert in middle square
-        insertX = mod(vec1(i),  squareSize);
-        insertY = ceil(vec1(i)/ squareSize) - 1;
+        insertRow = mod(vec1(i),  squareSize) + startRow;
+        insertCol = ceil(vec1(i)/ squareSize) - 1 + startCol;
 
         %In square
-        oldVal = im(startX + insertX, startY + insertY);
+        oldVal = im(insertRow,insertCol);
 
         %where it is coming from
         swapX = rows(vec2(i));
@@ -43,7 +50,9 @@ function [ newIm ] = swap( im, valueLow, valueHigh, squareSize, startX, startY )
         newIm(swapX, swapY) = oldVal;
 
         %location in square
-        newIm(startX + insertX, insertY + startY) = moveToSquare;
+        newIm(insertRow, insertCol) = moveToSquare;
+        
+        swapIndexes(i,:) = [insertRow,insertCol,swapX,swapY];
 
     end
 end

@@ -2,7 +2,7 @@ clear all; clc; close all;
 
 levels = 2; 
 
-imageName = 'forest.jpg';
+imageName = 'leaves.jpg';
 
 imageA = im2double(imread(imageName));
 imageB = im2double(imread(imageName));
@@ -11,9 +11,9 @@ imageB = im2double(imread(imageName));
  
 resultsPercentage = zeros(10, 10);
 
-originalString = 'Hello Amrit and Tim.';
+originalString = 'Hello CS 280 Class :)';
 
-[ bitsToEncode, numBitsToEncode ] = createBitsToEncode( originalString )
+[ bitsToEncode, numBitsToEncode ] = createBitsToEncode( originalString );
 
 dataSquare = zeros(10,10);
 
@@ -77,14 +77,17 @@ for currentContrastMagnitude = 10: 10
 end
 
 % can load the data if already saved
-t = load('forestDataSquare.mat');
+t = load('leavesDataSquare.mat');
 dataSquare = t.dataSquare;
 
-r = load('forestNumBitEncoded.mat');
+r = load('leavesNumBitsEncoded.mat');
 numBitsCanEncodeWithDiffSquares = r.numBitsCanEncodeWithDiffSquares;
+
+
 
 [currentContrastMagnitude, currentSquareSize, bitsWeNeedToEncode]=pickParamaters( dataSquare, numBitsCanEncodeWithDiffSquares, numBitsToEncode)
  
+
  %%%MAKE THE FINAL ENCODING
  
  if currentContrastMagnitude == -1        
@@ -93,6 +96,8 @@ numBitsCanEncodeWithDiffSquares = r.numBitsCanEncodeWithDiffSquares;
  end
  
 %Create the final image 
+
+currentContrastMagnitude = currentContrastMagnitude * 7;
 
 squareSize = currentSquareSize * 10;
 cutSize = squareSize * 3;
@@ -110,6 +115,8 @@ for i = 0 : cutsH
     
     if bitCounter <= size(bitsToEncode, 2)
         bitToEncode = bitsToEncode(bitCounter);
+    else
+        bitToEncode = round(rand);
     end
            
     if bitToEncode == 1

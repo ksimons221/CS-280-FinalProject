@@ -21,6 +21,7 @@ for i = 1:10
             if bitsWeCanEncode > bitsWeNeedToEncode
                 contrastMag = i;
                 squareSize = j;
+                dataSquare(i,j)
                 return
             end
         end

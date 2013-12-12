@@ -1,23 +1,47 @@
 clear all; clc; close all;
 
-smallTexture = imread('fur.png'); 
+smallTexture = imread('texture3.png'); 
 
 im = rgb2gray(smallTexture);
 
 numLevelsPyr = 5;
 
-iterations = 3;
-
-noise = rand(300, 300);
+iterations = 2;
 
 
-%noise(121:150, 121:150) = 0;%(randi(80,50,50)./100) + .2;
+squareSize = 200;
 
-%keyboard;
+numTiles = 2;
 
-%noise(:, 1:200) = 1;
+s = RandStream('mt19937ar','Seed',1);
 
-newTexture = matchTextureLap(noise, im, numLevelsPyr, iterations);
+largeNoise = rand(s,squareSize*numTiles, squareSize*numTiles);
+
+
+finalImage = zeros(1,1);
+
+
+for i = 0:numTiles-1
+    for j = 0:numTiles-1
+        squareOfNoise = largeNoise( (i*squareSize)+1 : (i+1)*squareSize, (j*squareSize)+1 : (j+1)*squareSize);
+        newTexture = matchTextureLap(squareOfNoise, im, numLevelsPyr, iterations);
+
+        [newH, newW, d] = size(newTexture);
+        
+        if size(finalImage,1) == 1
+            finalImage = zeros(numTiles*newH, numTiles*newW);
+        end
+        
+        finalImage(   (i*newH)+1: (i+1)*newH,   (j*newW)+1: (j+1)*newW) = newTexture;
+        
+    end
+end
+
+
+
+
+
+%newTexture = matchTextureLap(noise, im, numLevelsPyr, iterations);
 
 
 h = fspecial('gaussian');
@@ -25,6 +49,6 @@ h = fspecial('gaussian');
 blurText = conv2(newTexture, double(h), 'same');
 
 
-imshow(uint8(blurText));
+imshow(uint8(finalImage));
 
 
