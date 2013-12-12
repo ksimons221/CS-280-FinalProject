@@ -1,5 +1,6 @@
 function [ im ] = matchTextureLap( noise, texture, numLevelsPyr, iterations )
 
+
 texturePyramid = genPyr(texture, 'lap', numLevelsPyr);
 
 im = matchHistogram(noise, texture);
@@ -8,16 +9,17 @@ lowValueSwap = 10;
 highValueSwap = 90;
 
 for i = 1:iterations
-    i
+
     noiseTexture = genPyr(im, 'lap', numLevelsPyr);
     for j = 1:numLevelsPyr
+        
         toReplace = matchHistogram(noiseTexture{j}, texturePyramid{j});
         
          noiseTexture{j} = toReplace;
 
         if j == 5
            %keyboard;
-           squareSize = 6;
+           squareSize = 3;
            moveAmount = .2;
            startRow = ceil(size(toReplace, 2)*.7);
            startCol = ceil(size(toReplace, 2)*moveAmount);          

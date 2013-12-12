@@ -19,7 +19,6 @@ if min(min(im2_shifted)) < 0
     im2_shifted = im2_shifted - min(min(im2_shifted));
 end
 %}
-
 [im1_cdf, min_val1, bucketSize1] = makeCDF(im1_shifted);
 [im2_cdf, min_val2, bucketSize2] = makeCDF(im2_shifted);
 
@@ -32,7 +31,8 @@ for i = 1:rows
         if bucketIndex < 1 || bucketIndex > 256
             keyboard;
         end
-        
+        if i == 1 && j == 1
+        end
         newPercentage = CDFLookup(im1_cdf, bucketIndex);
         newBucket = InvCDFLookup(im2_cdf,newPercentage ); 
         newPixelValue = min_val2 + (bucketSize2 * newBucket);
@@ -45,6 +45,7 @@ end
 end
 
 function [cdf, min_val, bucketSize] = makeCDF(im)
+
 [h, min_val, bucketSize] = myHist(im);
 
 sum = 0;
@@ -107,7 +108,7 @@ function [histo, min_val, bucketSize] = myHist(im)
     max_val = max(im);
     min_val = min(im);
 
-    bucketSize = (max_val-min_val)/256;
+    bucketSize = double((max_val-min_val))/256;
     for i = 1:256
         lower_bound = min_val + (i-1)*bucketSize;
         upper_bound = min_val + i*bucketSize;
