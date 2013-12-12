@@ -45,7 +45,7 @@ sumDiff = sum(diff);
 imwrite(im,'modified.png');
 
 readModifed = imread('modified.png');
-
+keyboard;
 [decodedBitsAfterSave] = decodeImageNaive( readModifed );
 
 numDifferent = 0;

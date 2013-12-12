@@ -2,7 +2,7 @@ clear all; clc; close all;
 
 levels = 2; 
 
-imageName = 'leaves.jpg';
+imageName = 'apple.jpg';
 
 imageA = im2double(imread(imageName));
 imageB = im2double(imread(imageName));
@@ -11,7 +11,7 @@ imageB = im2double(imread(imageName));
  
 resultsPercentage = zeros(10, 10);
 
-originalString = 'Hello CS 280 Class :)';
+originalString = 'Dog';
 
 [ bitsToEncode, numBitsToEncode ] = createBitsToEncode( originalString );
 
@@ -19,12 +19,12 @@ dataSquare = zeros(10,10);
 
 numBitsCanEncodeWithDiffSquares = zeros(1,10);
 
-for currentContrastMagnitude = 10: 10
+for currentContrastMagnitude = 1: 10
 
-    for currentSquareSize = 10: 10
+    for currentSquareSize = 2: 10
         
         [currentContrastMagnitude, currentSquareSize]
-        
+                
         squareSize = currentSquareSize * 10;
 
         cutSize = squareSize * 3;
@@ -77,11 +77,11 @@ for currentContrastMagnitude = 10: 10
 end
 
 % can load the data if already saved
-t = load('leavesDataSquare.mat');
-dataSquare = t.dataSquare;
+%t = load('leavesDataSquare.mat');
+%dataSquare = t.dataSquare;
 
-r = load('leavesNumBitsEncoded.mat');
-numBitsCanEncodeWithDiffSquares = r.numBitsCanEncodeWithDiffSquares;
+%r = load('leavesNumBitsEncoded.mat');
+%numBitsCanEncodeWithDiffSquares = r.numBitsCanEncodeWithDiffSquares;
 
 
 
@@ -97,7 +97,7 @@ numBitsCanEncodeWithDiffSquares = r.numBitsCanEncodeWithDiffSquares;
  
 %Create the final image 
 
-currentContrastMagnitude = currentContrastMagnitude * 7;
+%currentContrastMagnitude = currentContrastMagnitude * 7;
 
 squareSize = currentSquareSize * 10;
 cutSize = squareSize * 3;
@@ -110,9 +110,7 @@ bitCounter = 1;
 for i = 0 : cutsH
 
     for j = 0 : cutsW
-    
-    bitToEncode = 0;
-    
+        
     if bitCounter <= size(bitsToEncode, 2)
         bitToEncode = bitsToEncode(bitCounter);
     else
@@ -122,7 +120,7 @@ for i = 0 : cutsH
     if bitToEncode == 1
         contrastAdjust = currentContrastMagnitude * 1;
     else
-        contrastAdjust = currentContrastMagnitude * -1;    
+        contrastAdjust = currentContrastMagnitude * -1; 
     end
     
     if bitsWeNeedToEncode < bitCounter
@@ -149,7 +147,27 @@ end
  
 %%% Finished encoding the image. Now we need to reconstruct bits           
 
-[ resultBits ] = reconstructBits( finalImage, squareSize)
+%finalImage = uint8(finalImage.*255);
 
-imshow(finalImage);  %the final tiled image
+
+
+[ resultBits ] = reconstructBits( finalImage, squareSize);
+t = imresize(finalImage, .5);
+[ resultBitsT ] = reconstructBits( t, squareSize/2);
+keyboard;
+
+imwrite(finalImage, 'compressTest.png');
+imwrite(finalImage, 'compressTest.jpg');
+
+compressedPNG = imread('compressTest.png');
+compressedJPG = imread('compressTest.jpg');
+
+[ resultBitsPng ] = reconstructBits( compressedPNG, squareSize);
+[ resultBitsJpg ] = reconstructBits( compressedJPG, squareSize);
+
+
+[ pngDifferent ] = numElementsDifferent( resultBits, resultBitsPng );
+[ jpgDifferent ] = numElementsDifferent( resultBits, resultBitsJpg );
+keyboard;
+
 

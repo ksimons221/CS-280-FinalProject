@@ -1,13 +1,52 @@
-function [ newIm, swapIndexes ] = swap( im, valueLow, valueHigh, squareSize, startRow, startCol ) 
+function [ newIm, swapIndexes ] = swap( im, valueLow, valueHigh, squareSize, startRow, startCol, moveAmount ) 
 
+
+    %move amount will be be 0 to move into left and 1 to move into right
 
     %swapIndexes is numSwaps by 4. Each row is x1, y1, x2, y2
     
+    cutOff = floor(size(im,2) / 2);
+    
     newIm = im;
 
+    if moveAmount == 1
+        [rows, cols, ~] = find(im(:,1:cutOff) >= valueLow & im(:,1:cutOff) <= valueHigh);
+    else
+       [rows, cols, ~] = find(im(:,cutOff+1:end) >= valueLow & im(:,cutOff+1:end) <= valueHigh);
+       cols = cols + cutOff;
+    end
+    %{
     [rows, cols, ~] = find(im >= valueLow & im <= valueHigh);
+    
+    numElements = length(rows);
 
-    numElements = length(rows)
+    currentIndex = 1;
+    timesIterated = 1;
+    keyboard;
+    while true
+       if timesIterated > numElements
+           break;
+       end
+       if moveAmount == 0
+           if col(currentIndex) < cutOff
+                cols = removerows(cols,currentIndex);
+                rows = removerows(rows,currentIndex);
+
+           end
+       elseif moveAmount == 1
+            if col(currentIndex) > cutOff
+                cols = removerows(cols,currentIndex);
+                rows = removerows(rows,currentIndex);
+           end
+       else
+          disp('Error');
+       end
+       timesIterated = timesIterated + 1;
+       
+    end
+    %}
+    
+    numElements = length(rows);
 
     
     s = RandStream('mt19937ar','Seed',0);
@@ -17,13 +56,6 @@ function [ newIm, swapIndexes ] = swap( im, valueLow, valueHigh, squareSize, sta
     vec2 =randperm(s, numElements);
     
     per = numElements/(squareSize.^2);
-    limit = 0.4;
-    
-    if per < limit
-        numSwaps = numElements;
-    else
-        numSwaps = ceil(limit*squareSize.^2);
-    end    
 
     numSwaps = min(numElements, squareSize^2)
     swapIndexes = zeros(numSwaps, 4);

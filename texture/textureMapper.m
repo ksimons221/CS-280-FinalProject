@@ -19,14 +19,21 @@ im_r = reshape(im(:,1), w, h);
 im_g = reshape(im(:,2), w, h);
 im_b = reshape(im(:,3), w, h);
 
-newRTexture = matchTextureLap(rand(300, 300), im_r, numLevelsPyr, iterations);
+s = RandStream('mt19937ar','Seed',7);
+
+
+noise1 = rand(s,300, 300);
+noise2 = rand(s,300, 300);
+noise3 = rand(s,300, 300);
+
+newRTexture = matchTextureLap(noise1, im_r, numLevelsPyr, iterations);
 [h, w] = size(newRTexture);
 out_r = reshape(newRTexture, h*w, 1);
 
-newGTexture = matchTextureLap(rand(300, 300), im_g, numLevelsPyr, iterations);
+newGTexture = matchTextureLap(noise2, im_g, numLevelsPyr, iterations);
 out_g = reshape(newGTexture, h*w, 1);
 
-newBTexture = matchTextureLap(rand(300, 300), im_b, numLevelsPyr, iterations);
+newBTexture = matchTextureLap(noise3, im_b, numLevelsPyr, iterations);
 out_b = reshape(newBTexture, h*w, 1);
 
 out = double([out_r, out_g, out_b])';
@@ -45,4 +52,6 @@ out_imb = reshape(out_imb , w, h);
 out_im = cat(3, out_imr, out_img);
 out_im = cat(3, out_im, out_imb);
 
-imshow(uint8(out_im));
+out_im = uint8(out_im);
+
+[ sumsOfCDF ] = plotAllCdfs( rgb2gray(out_im), smallTextureGray )
